@@ -126,14 +126,32 @@ doctrine:migrations:sync-metadata-storage [sync-metadata-storage] Zajišťuje, �
 doctrine:migrations:list [list-migrations] Zobrazí seznam všech dostupných migrací a jejich stav.
 ```
 
-## Základní příkazy pro tvorbu formulářu
+## Základní příkazy a metody pro tvorbu formulářu
 Příkazy zadáváme v docker containeru
 
 #### 
 ```sh
 php bin/console make:form
 ```
-V prvním kroku zadáme název formuláře a ve druhém kroku název entity.
+
+V prvním kroku zadáme název formuláře a ve druhém kroku název entity, ze které bude formulář vygenerován. Vygeneruje
+nám to formulář, který bude potřeba dále dodělat. Formulář se vygeneruje do adresáře src/Form/NazevFormulareFormType.php
+V metodě "build" provedeme úprqvy.
+
+
+#### Příklad vygenerovaného formulářového elementu:
+
+Můžeme v jednotlivých elementech nastavovat např. required, class pro stylování, 
+validaci elementu a počet znaků, které je možné do elementu vyplnit. Název elementu
+nebo typ. Náš vzorový element se jmenuje "street", a je typ "Textarea".
+
+```sh
+->add('street', TextareaType::class, ['required' => true,
+                'row_attr' => ['class' => 'form-group is-invalid'],
+                'attr' => ['maxlength' => 4
+                    //, 'novalidate' => 'novalidate']
+                ]])
+```
 
 
 
