@@ -1,4 +1,4 @@
-# IT Symfony template
+# Symfony template
 
 Tento template je vhodné si naklonovat rovnou už v GitLabu, protože
 projekt už bude mít pojmenování podle vašeho přání.
@@ -17,10 +17,10 @@ Toto by melo stahnout a nastavit vše potřebné
 docker-compose up  -d nebo
 docker-compose up -d --build
 ```
-V tuto chvili by mel byt docker projekt ready na http://localhost:84 viz soubor docker-compose.yml,
+V tuto chvili by mel byt docker projekt ready na http://localhost:85 viz soubor docker-compose.yml,
 kde to jde i změnit. --build používáme pro přegenerování image kontejneru.
 ```sh
-http://localhost:84
+http://localhost:85
 ```
 
 #### ukončení kontejneru
@@ -33,7 +33,7 @@ Potom je možné i na stejný port spustit jiný kontejner.
 
 Součásti konfigurace je SQL databáze a adminer. Najdeme jí na url:
 ```sh
-http://localhost:84/adminer
+http://localhost:85/adminer
 ```
 Databáze mezi kontejnery je na portu 3306 viz soubor docker-compose.yml.
 Není potřeba psát do připojení k databázi IP a port. Stačí název service
@@ -42,7 +42,7 @@ ze souboru docker-compose.yml vč. jména root a hesla.
 mysqldb
 ```
 Neukládejte na Gitlab soubory DB, pouze sql dump. Jedná se o adresář ./data/database, který musí zůstat
-git ignore.
+git ignore. 
 
 
 
