@@ -1,8 +1,43 @@
-# IT Symfony template
+<p align="center"><a href="https://symfony.com" target="_blank"><img src="https://symfony.com/logos/symfony_black_02.svg" width="400" alt="Symfony Logo"></a></p>
+
+
+# Symfony template
 
 Tento template je vhodné si naklonovat rovnou už v GitLabu, protože
 projekt už bude mít pojmenování podle vašeho přání.
 Součástí template je i konfigurace DOCKERU.
+
+## Import do nového projektu krok 1
+Zde vybereme "Import projekt".
+
+![Path mapping](./docker/img/importDoNovehoProjektu.png)
+
+## Import do nového projektu krok 2
+Zde vybereme "Repo by URL.
+
+![Path mapping](./docker/img/importProjektu.png)
+
+## Import do nového projektu krok 3
+Vyplnění údajů pro import template do vašeho nového projektu:
+##### 1, Git repository URL - URL zdrojového repozitáře (můj template)
+##### 2, Username (optional) - vaše přihlašovací jméno
+##### 3, Password (optional) - vaše přihlašovací heslo
+##### 4, Project name - jméno nového projektu
+##### 5, Visibility Level - viditelnost projektu
+
+![Path mapping](./docker/img/nastaveniImportu.png)
+
+## Nastavení xdebug
+
+
+Nastavení debug a portů:
+
+![](docker/img/img1.png)
+
+
+Nastavení cesty k projektu a uvnitř kontejneru:
+
+![](docker/img/img2.png)
 
 ## Základní příkazy pro konfiguraci kontejneru
 
@@ -17,10 +52,10 @@ Toto by melo stahnout a nastavit vše potřebné
 docker-compose up  -d nebo
 docker-compose up -d --build
 ```
-V tuto chvili by mel byt docker projekt ready na http://localhost:84 viz soubor docker-compose.yml,
+V tuto chvili by mel byt docker projekt ready na http://localhost:85 viz soubor docker-compose.yml,
 kde to jde i změnit. --build používáme pro přegenerování image kontejneru.
 ```sh
-http://localhost:84
+http://localhost:85
 ```
 
 #### ukončení kontejneru
@@ -33,7 +68,7 @@ Potom je možné i na stejný port spustit jiný kontejner.
 
 Součásti konfigurace je SQL databáze a adminer. Najdeme jí na url:
 ```sh
-http://localhost:84/adminer
+http://localhost:85/adminer
 ```
 Databáze mezi kontejnery je na portu 3306 viz soubor docker-compose.yml.
 Není potřeba psát do připojení k databázi IP a port. Stačí název service
@@ -44,11 +79,96 @@ mysqldb
 Neukládejte na Gitlab soubory DB, pouze sql dump. Jedná se o adresář ./data/database, který musí zůstat
 git ignore.
 
+## Konfigurace routování
 
+Konfigurace routování, směrování je aktuálně v template nastaveno přes anotace
+u jednotlivých method Controlleru, kde se nastavuje obsluhovaná URL a pojmenovává
+routa.
+
+```sh
+     /**
+     * @Route("/form-add/{id}", defaults={"id" = null}, name="homepage_form_add") 
+     * @param Request $request
+     * @param ManagerRegistry $doctrine
+     * @return Response
+     */
+         public function formAdd(string $id = null, Request $request, ManagerRegistry $doctrine): Response
+    {
+```
+
+## Šablonovací systém "Twig"
+
+Šablony jsou v adresáři templates a pojmenování má formát nazevsablony.html.twig.
+Když je šablona v podadresáří, voláme nazevadresare.nazevsablony.html.twig.
+
+dědění layoutové šablony:
+```sh
+{% extends 'base.html.twig' %}
+```
+
+označení bloku html contentu, co se includuje podle příslušné akce controlleru do layoutu:
+```sh
+{% block body %}
+// nejaké html pro content
+{% endblock %}
+```
+
+příklad vložení contentu jednotlivých stránek do layoutu:
+```sh
+    {% block body %}
+    {% endblock %}
+```
+
+pro případ vložení nějakého js nebo css konkrétní stránky do layoutu:
+```sh
+    {% block css %}
+    {% endblock %}
+    {% block js %}
+    {% endblock %}
+```
+
+příklad výpisu proměnné v layoutu:
+```sh
+{{ id }}
+```
+
+příklad generování odkazu na pojmenovanou routu, kterou vložíme třeba do href html tagu a pod:
+```sh
+{{ path('homepage_detail') }}
+```
+
+
+vložení js nebo css z příslušné šablony do layoutu:
+```sh
+    {% block css %}
+    {% endblock %}
+    {% block js %}
+    {% endblock %}
+```
+
+příklad podmínky v layoutu:
+```sh
+{% if data is iterable %}
+{% endif %}
+```
+
+příklad cyklu v layoutu:
+```sh
+{% for key, value in data %}
+{{ value.street }} // přístup v poli v cyklu
+
+      {% if loop.last %} // v cyklu můžeme použít i iterátor.
+          <hr style="border: 1px solid red">
+      {% endif %}
+
+{% endfor %}
+```
 
 ## Nastavení přístupu k DB přes doctrine
+
+
 Nastavujeme v souboru env na root webu
-```
+```sh
 DATABASE_URL="mysql://pokus:pokus@mysqldb:3306/pokus?serverVersion=mariadb-10.7.3&charset=utf8mb4"
 ```
 
@@ -80,12 +200,12 @@ Vytvoří tabulky v DB
 ```sh
 php bin/console doctrine:mapping:import "App\Entity" annotation --path=src/Entity
 ```
-Prvním krokem k vytvoření tříd entit z existující databáze je požádat Doctrine, aby 
-si databázi prohlédla a vygenerovala odpovídající soubory metadat. 
+Prvním krokem k vytvoření tříd entit z existující databáze je požádat Doctrine, aby
+si databázi prohlédla a vygenerovala odpovídající soubory metadat.
 Soubory metadat popisují třídu entity, která se má generovat na základě polí tabulky.
 
-Tento nástroj příkazového řádku žádá Doctrinu, aby prozkoumala databázi a vygenerovala 
-nové třídy PHP s metadaty anotací do src/Entity. Tím se vygenerují dva soubory: 
+Tento nástroj příkazového řádku žádá Doctrinu, aby prozkoumala databázi a vygenerovala
+nové třídy PHP s metadaty anotací do src/Entity. Tím se vygenerují dva soubory:
 BlogPost.phpa BlogComment.php.
 
 #### úpravy existujících entit
@@ -126,14 +246,32 @@ doctrine:migrations:sync-metadata-storage [sync-metadata-storage] Zajišťuje, �
 doctrine:migrations:list [list-migrations] Zobrazí seznam všech dostupných migrací a jejich stav.
 ```
 
-## Základní příkazy pro tvorbu formulářu
+## Základní příkazy a metody pro tvorbu formulářu
 Příkazy zadáváme v docker containeru
 
 #### 
 ```sh
 php bin/console make:form
 ```
-V prvním kroku zadáme název formuláře a ve druhém kroku název entity.
+
+V prvním kroku zadáme název formuláře a ve druhém kroku název entity, ze které bude formulář vygenerován. Vygeneruje
+nám to formulář, který bude potřeba dále dodělat. Formulář se vygeneruje do adresáře src/Form/NazevFormulareFormType.php
+V metodě "build" provedeme úprqvy.
+
+
+#### Příklad vygenerovaného formulářového elementu:
+
+Můžeme v jednotlivých elementech nastavovat např. required, class pro stylování,
+validaci elementu a počet znaků, které je možné do elementu vyplnit. Název elementu
+nebo typ. Náš vzorový element se jmenuje "street", a je typ "Textarea".
+
+```sh
+->add('street', TextareaType::class, ['required' => true,
+                'row_attr' => ['class' => 'form-group is-invalid'],
+                'attr' => ['maxlength' => 4
+                    //, 'novalidate' => 'novalidate']
+                ]])
+```
 
 
 
