@@ -164,6 +164,12 @@ příklad cyklu v layoutu:
 {% endfor %}
 ```
 
+Vypsání formuláře v šabloně
+
+```sh
+ {{ form(form) }}
+```
+
 ## Nastavení přístupu k DB přes doctrine
 
 
@@ -229,6 +235,7 @@ bin/console doctrine:migrations:sync-metadata-storage
 ```
 Synchronizuje metadata
 
+
 #### všechny příkazy
 ```sh
 doctrine:migrations:current [aktuální] Vypíše aktuální verzi.
@@ -266,12 +273,82 @@ validaci elementu a počet znaků, které je možné do elementu vyplnit. Název
 nebo typ. Náš vzorový element se jmenuje "street", a je typ "Textarea".
 
 ```sh
-->add('street', TextareaType::class, ['required' => true,
+->add('street', TextareaType::class, ['required' => true,  
                 'row_attr' => ['class' => 'form-group is-invalid'],
                 'attr' => ['maxlength' => 4
                     //, 'novalidate' => 'novalidate']
                 ]])
 ```
 
+##### Příklad manuální úpravy formulářů:
+
+U formulářů můžeme např. nastavit i třidy css pro html, omezit počet znaků v elementu a
+vypnout nebo zapnout validaci.
+
+```sh
+'required' => true  // nutno vyplnit
+'row_attr' => ['class' => 'form-group is-invalid'] // príklad nastavení dvou class v html
+'novalidate' => 'novalidate' // vypnutí validace
+'attr' => ['maxlength' => 4 // maximální počet znaků v elementu
+'placeholder' => '--- Vyber mesto ---' // příklad placeholder
+'label' => 'Mesto'
+'row_attr' => ['class' => 'form-group is-invalid',]
+'label_attr' => ['class' => 'mt-4'] // nastavení html class pro popisek formuláře
+```
+
+Příklad nastavení formulářového elementu, název a typ elementu.
+
+```sh
+>add('street', TextareaType::class  // element se jmenuje "street" a typ je textarea
+```
+
+V případě, že entita ze které byla tabulka generována má relaci do jiné tabulky a je potřeba
+input select, upravíme element takto. Příklad pro relaci do tabulky Cities
+
+```sh
+->add('cities', EntityType::class, [  // misto typu elementu zapíšeme EntityType::class
+     'placeholder' => '--- Vyber mesto ---', 
+      'class' => Cities::class, // nazev entity kam je odkazováno
+```
+
+Vytvoření formuláře v Controleru v příslušné akci
+
+```sh
+$form = $this->createForm(AddressFormType::class, $Eaddress,
+     [
+        'action' => $this->generateUrl('homepage_form_add'),
+        'method' => 'POST'
+      ])->handleRequest($request);
+```
 
 
+Metody pro kontrolu stavu odeslání a validity formuláře
+
+```sh
+$form->isSubmitted()
+$form->isValid()
+```
+
+Uložení do zprávy flash messages
+
+```sh
+$this->addFlash("success", 'Data ulozena');
+```
+
+Přesměrování na jinou stránku po uložení dat.
+
+```sh
+return $this->redirect($this->generateUrl('homepage_default'));
+```
+
+Příklad zpracování po odesláhní formuláře
+```sh
+public function formAgg(string $id = null, Request $request, ManagerRegistry $doctrine): Response
+
+            // ziskani dat z formulare
+            $data = $form->getData();
+
+            $em = $doctrine->getManager();
+            $em->persist($data);
+            $em->flush();
+```
