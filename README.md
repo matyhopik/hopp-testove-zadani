@@ -137,6 +137,11 @@ příklad generování odkazu na pojmenovanou routu, kterou vložíme třeba do 
 {{ path('homepage_detail') }}
 ```
 
+příklad vložení části stránky:
+```sh
+{% include 'navbar.html.twig' %}
+```
+
 
 vložení js nebo css z příslušné šablony do layoutu:
 ```sh
