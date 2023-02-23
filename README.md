@@ -357,3 +357,11 @@ public function formAgg(string $id = null, Request $request, ManagerRegistry $do
             $em->persist($data);
             $em->flush();
 ```
+
+CHYBA - Object of class could not be converted to String
+```sh
+    public function __toString()
+    {
+        return $this->entreprise_nom;
+    }
+```
