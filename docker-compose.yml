@@ -1,8 +1,8 @@
 version: '3.7'
 
-volumes:
-  web_data:
-    name: symfony_vendor
+#volumes:
+#  web_data:
+#    name: symfony_vendor
 
 services:
   symfony_web:
@@ -19,7 +19,7 @@ services:
       - "83:80" # HOST_PORT:CONTAINER_PORT
     #    network_mode: "host" # sdileni localhost s hostem, pozor na konflikt portu, viz. apache.ports.conf a apache.vhost.conf, nefunguje na ios
     volumes:
-      - web_data:/var/www/html/vendor
+#      - web_data:/var/www/html/vendor
       - ./web:/var/www/html
       - ./docker/php.ini:/usr/local/etc/php/php.ini
       - ./log:/var/log/nette:rw
