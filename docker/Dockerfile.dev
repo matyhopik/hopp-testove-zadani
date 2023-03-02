@@ -110,7 +110,7 @@ RUN rm -rf /var/www/html
 
 COPY ./php.ini /etc/php/php.ini
 
-#RUN mkdir /var/www/html/vendor
-#COPY ./vendor /var/www/html/vendor
+RUN mkdir /var/www/html/vendor
+COPY ./vendor /var/www/html/vendor
 
 CMD ["apache2-foreground"]
