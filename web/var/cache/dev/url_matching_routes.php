@@ -14,7 +14,10 @@ return [
         '/_profiler/phpinfo' => [[['_route' => '_profiler_phpinfo', '_controller' => 'web_profiler.controller.profiler::phpinfoAction'], null, null, null, false, false, null]],
         '/_profiler/xdebug' => [[['_route' => '_profiler_xdebug', '_controller' => 'web_profiler.controller.profiler::xdebugAction'], null, null, null, false, false, null]],
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
-        '/' => [[['_route' => 'homepage_default', '_controller' => 'App\\Controller\\HomepageController::default'], null, null, null, false, false, null]],
+        '/api/product' => [[['_route' => 'api_product', '_controller' => 'App\\Controller\\RestApiController::product'], null, ['GET' => 0], null, false, false, null]],
+        '/api/detail' => [[['_route' => 'api_detail', '_controller' => 'App\\Controller\\RestApiController::detail'], null, ['POST' => 0], null, false, false, null]],
+        '/api/new' => [[['_route' => 'api_new', '_controller' => 'App\\Controller\\RestApiController::new'], null, ['POST' => 0], null, false, false, null]],
+        '/api/edit' => [[['_route' => 'api_edit', '_controller' => 'App\\Controller\\RestApiController::edit'], null, ['PUT' => 0], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

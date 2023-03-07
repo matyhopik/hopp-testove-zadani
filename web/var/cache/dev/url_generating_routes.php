@@ -16,5 +16,8 @@ return [
     '_profiler_router' => [['token'], ['_controller' => 'web_profiler.controller.router::panelAction'], [], [['text', '/router'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], [], []],
     '_profiler_exception' => [['token'], ['_controller' => 'web_profiler.controller.exception_panel::body'], [], [['text', '/exception'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], [], []],
     '_profiler_exception_css' => [['token'], ['_controller' => 'web_profiler.controller.exception_panel::stylesheet'], [], [['text', '/exception.css'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], [], []],
-    'homepage_default' => [[], ['_controller' => 'App\\Controller\\HomepageController::default'], [], [['text', '/']], [], [], []],
+    'api_product' => [[], ['_controller' => 'App\\Controller\\RestApiController::product'], [], [['text', '/api/product']], [], [], []],
+    'api_detail' => [[], ['_controller' => 'App\\Controller\\RestApiController::detail'], [], [['text', '/api/detail']], [], [], []],
+    'api_new' => [[], ['_controller' => 'App\\Controller\\RestApiController::new'], [], [['text', '/api/new']], [], [], []],
+    'api_edit' => [[], ['_controller' => 'App\\Controller\\RestApiController::edit'], [], [['text', '/api/edit']], [], [], []],
 ];
